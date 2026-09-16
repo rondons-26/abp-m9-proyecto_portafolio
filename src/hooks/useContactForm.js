@@ -1,0 +1,49 @@
+import { useState } from 'react';
+
+export const useContactForm = () => {
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [status, setStatus] = useState({ loading: false, success: false, error: '' });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!formData.name || !formData.email || !formData.message) {
+            setStatus({ loading: false, success: false, error: 'Por favor, completa todos los campos requeridos.' });
+            return;
+        }
+
+        setStatus({ loading: true, success: false, error: '' });
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Ocurrió un error al enviar el mensaje.');
+            }
+
+            setStatus({ loading: false, success: true, error: '' });
+            setFormData({ name: '', email: '', message: '' });
+        } catch (err) {
+            setStatus({ loading: false, success: false, error: err.message });
+        }
+    };
+
+    return {
+        formData,
+        status,
+        handleChange,
+        handleSubmit
+    };
+};
