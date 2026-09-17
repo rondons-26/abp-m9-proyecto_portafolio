@@ -26,82 +26,111 @@ export default async function handler(req, res) {
   const resend = new Resend(resendApiKey);
 
   try {
-    // 1. Guardar mensaje en PostgreSQL (Supabase)
+    // 1. Guardar en Supabase
     const { error: dbError } = await supabase
       .from('mensajes_contacto')
       .insert([{ nombre: name, email, mensaje: message }]);
 
     if (dbError) throw dbError;
 
-    // 2. Notificación con Estilos Inline para compatibilidad total con Gmail
+    // Generar ID único para romper el hilo de correo de Gmail
+    const messageId = Date.now().toString().slice(-4);
+
+    // 2. Enviar correo con estructura HTML para clientes de correo
     await resend.emails.send({
       from: 'Portafolio <onboarding@resend.dev>',
       to: 'saulrondon077@gmail.com',
       replyTo: email,
-      subject: `📩 Nuevo mensaje de ${name} | Portafolio Web`,
+      subject: `[#${messageId}] Nuevo mensaje de ${name}`,
       html: `
-        <!DOCTYPE html>
-        <html>
-        <body style="font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px;">
-          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-            
-            <!-- Cabecera -->
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <title>Notificación de Contacto</title>
+        </head>
+        <body style="margin: 0; padding: 20px; background-color: #e2e8f0; font-family: Helvetica, Arial, sans-serif;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
             <tr>
-              <td style="background-color: #0f172a; padding: 24px 30px; text-align: left;">
-                <h2 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: 600;">Nuevo Mensaje de Contacto</h2>
-                <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Recibido desde el formulario de tu Portafolio Web</p>
-              </td>
-            </tr>
-
-            <!-- Cuerpo del mensaje -->
-            <tr>
-              <td style="padding: 30px;">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <td align="center" style="padding: 10px 0;">
+                
+                <!-- Tarjeta Principal -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #cbd5e1;">
                   
+                  <!-- Cabecera -->
                   <tr>
-                    <td style="padding-bottom: 20px;">
-                      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 4px;">Remitente</div>
-                      <div style="font-size: 15px; color: #1e293b; font-weight: 600;">${name}</div>
+                    <td bgcolor="#0f172a" style="padding: 25px 30px; text-align: left;">
+                      <h1 style="color: #ffffff; font-size: 18px; margin: 0; font-weight: bold; letter-spacing: 0.5px;">PORTAFOLIO WEB</h1>
+                      <p style="color: #38bdf8; font-size: 13px; margin: 5px 0 0 0;">Nuevo mensaje de contacto recibido</p>
                     </td>
                   </tr>
 
+                  <!-- Datos -->
                   <tr>
-                    <td style="padding-bottom: 20px;">
-                      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 4px;">Correo Electrónico</div>
-                      <div style="font-size: 15px;">
-                        <a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-weight: 500;">${email}</a>
-                      </div>
+                    <td style="padding: 30px;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        
+                        <!-- Nombre -->
+                        <tr>
+                          <td style="padding-bottom: 15px;">
+                            <span style="font-size: 11px; font-weight: bold; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 3px;">REMITENTE</span>
+                            <span style="font-size: 16px; color: #0f172a; font-weight: bold;">${name}</span>
+                          </td>
+                        </tr>
+
+                        <!-- Email -->
+                        <tr>
+                          <td style="padding-bottom: 20px;">
+                            <span style="font-size: 11px; font-weight: bold; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 3px;">CORREO DE CONTACTO</span>
+                            <a href="mailto:${email}" style="font-size: 15px; color: #2563eb; text-decoration: none; font-weight: bold;">${email}</a>
+                          </td>
+                        </tr>
+
+                        <!-- Caja de Mensaje -->
+                        <tr>
+                          <td style="padding-bottom: 25px;">
+                            <span style="font-size: 11px; font-weight: bold; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 5px;">MENSAJE</span>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                              <tr>
+                                <td bgcolor="#f8fafc" style="padding: 15px; border-left: 4px solid #2563eb; font-size: 14px; color: #334155; line-height: 1.5;">
+                                  ${message}
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                        <!-- Botón de Responder -->
+                        <tr>
+                          <td align="left">
+                            <table border="0" cellpadding="0" cellspacing="0">
+                              <tr>
+                                <td align="center" bgcolor="#2563eb" style="border-radius: 6px;">
+                                  <a href="mailto:${email}?subject=Re: Mensaje desde el Portafolio" target="_blank" style="font-size: 14px; font-weight: bold; color: #ffffff; text-decoration: none; inline-block; padding: 12px 20px; display: inline-block;">
+                                    Responder directamente a ${name}
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+
+                      </table>
                     </td>
                   </tr>
 
+                  <!-- Footer -->
                   <tr>
-                    <td style="padding-bottom: 25px;">
-                      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 6px;">Mensaje</div>
-                      <div style="background-color: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; border-radius: 0 8px 8px 0; font-size: 14px; color: #334155; line-height: 1.6;">
-                        ${message}
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td align="left">
-                      <a href="mailto:${email}?subject=Re: Tu contacto desde el Portafolio" style="background-color: #2563eb; color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; padding: 12px 24px; border-radius: 8px; display: inline-block;">
-                        Responder a ${name}
-                      </a>
+                    <td bgcolor="#f1f5f9" style="padding: 15px 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                      <p style="margin: 0; font-size: 12px; color: #64748b;">Notificación enviada desde el Portafolio Profesional</p>
                     </td>
                   </tr>
 
                 </table>
+
               </td>
             </tr>
-
-            <!-- Pie de página -->
-            <tr>
-              <td style="background-color: #f8fafc; padding: 16px 30px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
-                Notificación automática del Portafolio • Saúl Rondón Espinosa
-              </td>
-            </tr>
-
           </table>
         </body>
         </html>
