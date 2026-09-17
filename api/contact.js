@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     if (dbError) throw dbError;
 
-    // 2. Notificación con Plantilla HTML Profesional
+    // 2. Notificación con Estilos Inline para compatibilidad total con Gmail
     await resend.emails.send({
       from: 'Portafolio <onboarding@resend.dev>',
       to: 'saulrondon077@gmail.com',
@@ -41,49 +41,68 @@ export default async function handler(req, res) {
       subject: `📩 Nuevo mensaje de ${name} | Portafolio Web`,
       html: `
         <!DOCTYPE html>
-        <html lang="es">
-        <head>
-          <meta charset="UTF-8">
-          <style>
-            body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
-            .card { max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
-            .header { background: #0f172a; padding: 24px 30px; text-align: left; }
-            .header h2 { color: #ffffff; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
-            .header p { color: #94a3b8; margin: 4px 0 0 0; font-size: 13px; }
-            .content { padding: 30px; }
-            .field-group { margin-bottom: 20px; }
-            .label { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 4px; }
-            .value { font-size: 15px; color: #1e293b; font-weight: 500; }
-            .message-box { background: #f8fafc; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 0 8px 8px 0; font-size: 14px; color: #334155; line-height: 1.6; white-space: pre-wrap; margin-top: 6px; }
-            .action-btn { display: inline-block; background-color: #2563eb; color: #ffffff !important; font-size: 14px; font-weight: 600; text-decoration: none; padding: 12px 24px; border-radius: 8px; margin-top: 20px; }
-            .footer { background: #f8fafc; padding: 16px 30px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; }
-          </style>
-        </head>
-        <body>
-          <div class="card">
-            <div class="header">
-              <h2>Nuevo Mensaje de Contacto</h2>
-              <p>Recibido desde el formulario de tu Portafolio Web</p>
-            </div>
-            <div class="content">
-              <div class="field-group">
-                <div class="label">Remitente</div>
-                <div class="value">${name}</div>
-              </div>
-              <div class="field-group">
-                <div class="label">Correo Electrónico</div>
-                <div class="value"><a href="mailto:${email}" style="color: #2563eb; text-decoration: none;">${email}</a></div>
-              </div>
-              <div class="field-group">
-                <div class="label">Mensaje</div>
-                <div class="message-box">${message}</div>
-              </div>
-              <a href="mailto:${email}?subject=Re: Tu contacto desde el Portafolio" class="action-btn">Responder a ${name}</a>
-            </div>
-            <div class="footer">
-              Notificación automática del Portafolio • Saúl Rondón Espinosa
-            </div>
-          </div>
+        <html>
+        <body style="font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px;">
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            
+            <!-- Cabecera -->
+            <tr>
+              <td style="background-color: #0f172a; padding: 24px 30px; text-align: left;">
+                <h2 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: 600;">Nuevo Mensaje de Contacto</h2>
+                <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 13px;">Recibido desde el formulario de tu Portafolio Web</p>
+              </td>
+            </tr>
+
+            <!-- Cuerpo del mensaje -->
+            <tr>
+              <td style="padding: 30px;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  
+                  <tr>
+                    <td style="padding-bottom: 20px;">
+                      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 4px;">Remitente</div>
+                      <div style="font-size: 15px; color: #1e293b; font-weight: 600;">${name}</div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding-bottom: 20px;">
+                      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 4px;">Correo Electrónico</div>
+                      <div style="font-size: 15px;">
+                        <a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-weight: 500;">${email}</a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding-bottom: 25px;">
+                      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 6px;">Mensaje</div>
+                      <div style="background-color: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; border-radius: 0 8px 8px 0; font-size: 14px; color: #334155; line-height: 1.6;">
+                        ${message}
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td align="left">
+                      <a href="mailto:${email}?subject=Re: Tu contacto desde el Portafolio" style="background-color: #2563eb; color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; padding: 12px 24px; border-radius: 8px; display: inline-block;">
+                        Responder a ${name}
+                      </a>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+
+            <!-- Pie de página -->
+            <tr>
+              <td style="background-color: #f8fafc; padding: 16px 30px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
+                Notificación automática del Portafolio • Saúl Rondón Espinosa
+              </td>
+            </tr>
+
+          </table>
         </body>
         </html>
       `
