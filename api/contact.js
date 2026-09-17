@@ -15,9 +15,10 @@ export default async function handler(req, res) {
   // Uso de globalThis para obtener process.env sin disparar advertencias de ESLint
   const nodeEnv = globalThis.process ? globalThis.process.env : {};
 
-  const supabaseUrl = nodeEnv.SUPABASE_URL || '';
-  const supabaseKey = nodeEnv.SUPABASE_KEY || '';
-  const resendApiKey = nodeEnv.RESEND_API_KEY || '';
+  // Corrección: busca el nombre con VITE_ (como está en tu Vercel) o el nombre estándar
+  const supabaseUrl = nodeEnv.VITE_SUPABASE_URL || nodeEnv.SUPABASE_URL || '';
+  const supabaseKey = nodeEnv.VITE_SUPABASE_KEY || nodeEnv.SUPABASE_KEY || '';
+  const resendApiKey = nodeEnv.VITE_RESEND_API_KEY || nodeEnv.RESEND_API_KEY || '';
 
   const supabase = createClient(supabaseUrl, supabaseKey);
   const resend = new Resend(resendApiKey);
