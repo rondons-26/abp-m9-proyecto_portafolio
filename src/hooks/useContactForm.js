@@ -4,7 +4,7 @@ export const useContactForm = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState({ loading: false, success: false, error: '' });
 
-    // Efecto para hacer desaparecer el mensaje (éxito o error) tras 5 segundos
+    // DURACIÓN DEL MENSAJE
     useEffect(() => {
         if (status.success || status.error) {
             const timer = setTimeout(() => {
@@ -13,9 +13,8 @@ export const useContactForm = () => {
                     success: false,
                     error: ''
                 }));
-            }, 5000); // 5000 ms = 5 segundos
+            }, 5000);
 
-            // Limpieza del temporizador si el componente se desmonte o el estado cambie
             return () => clearTimeout(timer);
         }
     }, [status.success, status.error]);

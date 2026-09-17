@@ -7,26 +7,22 @@ const ContactSection = () => {
 
     return (
         <div className="min-h-screen text-gray-800 dark:text-white px-6 sm:px-8 pt-24 pb-28 flex items-center justify-center relative overflow-hidden">
-            {/* Resplandor sutil de fondo */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-
             <div className="max-w-5xl w-full mx-auto relative z-10 space-y-12">
-                
-                {/* BLOQUE 1: Encabezado */}
+                {/* ENCABEZADO */}
                 <div className="text-center space-y-6">
                     <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight">
                         ¿Tienes una propuesta o proyecto? <br />
                         <span className="text-blue-600 dark:text-blue-500">Hablemos hoy.</span>
                     </h2>
 
-                    {/* Chips informativos centrados */}
                     <div className="flex flex-wrap justify-center items-center gap-4 text-xs sm:text-sm pt-2">
                         <a 
-                            href="mailto:rondonsaul14@gmail.com" 
+                            href="mailto:saulrondon077@gmail.com" 
                             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:border-blue-500 transition-colors"
-                        >
+                            >
                             <MailIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                            <span className="font-semibold">rondonsaul14@gmail.com</span>
+                            <span className="font-semibold">saulrondon077@gmail.com</span>
                         </a>
 
                         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm text-gray-700 dark:text-gray-300">
@@ -39,10 +35,9 @@ const ContactSection = () => {
                     </div>
                 </div>
 
-                {/* BLOQUE 2: Contenedor del Formulario Centrado */}
+                {/* CONTENEDOR DEL FOMULARIO */}
                 <div className="max-w-2xl mx-auto">
                     <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800/90 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-xl space-y-5">
-                        
                         {status.error && (
                             <div className="p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 rounded-xl text-xs sm:text-sm font-medium">
                                 {status.error}
@@ -97,7 +92,7 @@ const ContactSection = () => {
                             type="submit"
                             disabled={status.loading}
                             className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-md shadow-blue-500/20 active:scale-[0.99] flex justify-center items-center gap-2 text-sm"
-                        >
+                            >
                             {status.loading ? (
                                 <span className="inline-flex items-center gap-2">
                                     <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">
@@ -113,27 +108,31 @@ const ContactSection = () => {
                     </form>
                 </div>
 
-                {/* BLOQUE 3: Redes Profesionales */}
+                {/* REDES PROFESIONALES */}
                 <div className="pt-4 text-center">
                     <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-4">También puedes encontrarme en</p>
                     <div className="flex justify-center items-center gap-4">
                         <a 
-                            href="#" 
+                            href="https://www.linkedin.com/in/saulrondon/" 
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="flex items-center space-x-2 py-2.5 px-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-500 text-gray-700 dark:text-gray-300 transition-all duration-300 font-medium text-xs sm:text-sm shadow-sm"
-                        >
+                            >
                             <LinkedinIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                             <span>LinkedIn</span>
                         </a>
+
                         <a 
-                            href="#" 
+                            href="https://github.com/rondons-26" 
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="flex items-center space-x-2 py-2.5 px-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white text-gray-700 dark:text-gray-300 transition-all duration-300 font-medium text-xs sm:text-sm shadow-sm"
-                        >
+                            >
                             <GithubIcon className="w-4 h-4" />
                             <span>GitHub</span>
                         </a>
                     </div>
                 </div>
-
             </div>
         </div>
     );
