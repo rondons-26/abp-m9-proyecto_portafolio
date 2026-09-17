@@ -19,7 +19,7 @@ const ContactSection = () => {
     setStatus({ loading: true, success: false, error: '' });
 
     try {
-      // 1. Guardar mensaje directamente en PostgreSQL (Supabase)
+      // Guardado directo en PostgreSQL via Supabase SDK
       const { error: dbError } = await supabase
         .from('mensajes_contacto')
         .insert([
@@ -35,8 +35,8 @@ const ContactSection = () => {
       setStatus({ loading: false, success: true, error: '' });
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {
-      console.error('Error al enviar contacto:', err);
-      setStatus({ loading: false, success: false, error: 'No se pudo enviar el mensaje. Intenta nuevamente.' });
+      console.error('Error al guardar contacto:', err);
+      setStatus({ loading: false, success: false, error: 'Ocurrió un error al enviar tu mensaje.' });
     }
   };
 
