@@ -14,9 +14,14 @@ export default async function handler(req, res) {
 
   const nodeEnv = globalThis.process ? globalThis.process.env : {};
 
-  const supabaseUrl = nodeEnv.VITE_SUPABASE_URL || nodeEnv.SUPABASE_URL || '';
-  const supabaseKey = nodeEnv.VITE_SUPABASE_KEY || nodeEnv.SUPABASE_KEY || '';
-  const resendApiKey = nodeEnv.VITE_RESEND_API_KEY || nodeEnv.RESEND_API_KEY || '';
+  // Busca el valor en SUPABASE_URL o VITE_SUPABASE_URL y aplica .trim() para evitar el error PGRST125
+  const rawUrl = nodeEnv.SUPABASE_URL || nodeEnv.VITE_SUPABASE_URL || '';
+  const rawKey = nodeEnv.SUPABASE_ANON_KEY || nodeEnv.SUPABASE_KEY || nodeEnv.VITE_SUPABASE_KEY || '';
+  const rawResend = nodeEnv.RESEND_API_KEY || nodeEnv.VITE_RESEND_API_KEY || '';
+
+  const supabaseUrl = rawUrl.trim();
+  const supabaseKey = rawKey.trim();
+  const resendApiKey = rawResend.trim();
 
   const supabase = createClient(supabaseUrl, supabaseKey);
   const resend = new Resend(resendApiKey);
@@ -31,7 +36,7 @@ export default async function handler(req, res) {
       throw dbError;
     }
 
-    // 2. Notificación a tu correo personal (único permitido en onboarding@resend.dev)
+    // 2. Notificación a tu correo personal
     await resend.emails.send({
       from: 'Portafolio <onboarding@resend.dev>',
       to: 'rondonsaul14@gmail.com',
