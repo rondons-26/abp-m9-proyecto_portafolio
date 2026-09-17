@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
+    "nodemailer": "^10.0.10",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "resend": "^6.28.1"
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
